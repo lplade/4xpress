@@ -1,0 +1,20 @@
+- var isLoggedIn = true //for testing
+- var username = 'Admiral Akbar' // for testing
+nav.navbar.navbar-default.navbar-fixed-bottom
+	.container-fluid
+		.navbar-header.nav-justified
+			button.navbar-toggle.collapsed(type="button")
+			a.navbar-brand(href="#") #{title}
+			p.navbar-text &copy;2016 l.p.lade
+
+			.pull-right
+				if isLoggedIn
+					.navbar-right
+						p.navbar-text You are signed in as #{username}
+						a.navbar-btn.btn.btn-default.btn-sm(href="/signout") Sign out
+				else
+					form.navbar-form.navbar-right(role="login")
+						.form-group.form-group-sm
+							input.form-control(type="text" placeholder="Username")
+							input.form-control(type="password" placeholder="Password")
+						button.btn.btn-default.btn-sm(type="submit") Sign in

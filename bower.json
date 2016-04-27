@@ -1,0 +1,23 @@
+{
+  "name": "4xpress",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Larry Lade <lplade@users.noreply.github.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "angular": "^1.5.5",
+    "jquery": "^2.2.3"
+  }
+}

@@ -6,12 +6,41 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy;
+var parseurl = require('parseurl');
+var mongoose = require('mongoose');
+var session = require('express-session');
+var MongoDBStore = require('connect-mongodb-session')(session);
 
+var app = express();
+app.use(logger('dev'));
+
+// connect to session db
+var store = new MongoDBStore(
+	{
+		uri:'mongodb://localhost:27017/4x_session_db',
+		collection:'mySessions'
+	}
+);
+
+store.on('error', function(error){
+	assert.ifError(error);
+	assert.ok(false);
+});
+
+app.use(session({
+	secret: "T0T4L_P4WN4G3", //TODO replace with real random number
+	store: store,
+	resave: false, //stop warnings
+	saveUnitialized: false //stop warnings
+}));
+
+// ** Routers **
 var routes = require('./routes/index');
 var gamelist = require('./routes/gamelist');
 var users = require('./routes/users');
 
-var app = express();
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,7 +48,6 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

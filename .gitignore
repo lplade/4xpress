@@ -1,6 +1,10 @@
+# IDEA stuff
 .idea
 *.iws
-node_modules
+
+# temp files
 *~
-simple-auth-fav-color
-simple-auth-fav-color-twitter-auth
+
+# JS package managers
+node_modules
+bower_components
