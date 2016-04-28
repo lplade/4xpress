@@ -3,6 +3,8 @@ var APPNAME = "Space Jarl";
 
 var express = require('express');
 var router = express.Router();
+//var app = require('../app.js').app;
+var passport = require('../app.js').passport;
 
 
 /* GET home page. */
@@ -16,7 +18,10 @@ router.route('/login')
 		res.render('login', {title: APPNAME});
 	})
 	.post(function (req, res, next) {
-		//TODO login
+		passport.authenticate('local', {
+			successRedirect: '/',
+			failureRedirect: '/login'
+		})
 	});
 
 // ===== Sign out =====

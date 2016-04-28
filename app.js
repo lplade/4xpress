@@ -36,13 +36,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
-
 app.use(session(
-	{
-		secret: "T0T4L_P4WN4G3" //TODO replace with real random number
-	}
+	{ secret: "T0T4L_P4WN4G3" } //TODO replace with real random number
 ));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -89,5 +84,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
+exports.app = app;
+exports.passport = passport;
 
-module.exports = app;

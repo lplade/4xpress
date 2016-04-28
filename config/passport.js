@@ -2,7 +2,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('../models/user');
 
-//var configAuth = require('./auth');
+//var configAuth = require('./auth'); //pull credentials for things like Twitter
 
 module.exports = function (passport) {
 	//Passport session setup. Need the ability to
