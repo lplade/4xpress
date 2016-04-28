@@ -1,3 +1,7 @@
+//app-wide constants
+const APPNAME = "Space Jarl";
+
+//npm dependencies
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -8,9 +12,6 @@ var app = express();
 // view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
-//const in case we get bored with name
-const APPNAME = "Space Jarl";
 
 /*
 === MIDDLEWARE ===
@@ -27,10 +28,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Set up static files
 app.use(express.static(path.join(__dirname + '/public')));
 console.log(path.join(__dirname + '/public'));
-
-
-
-
 
 /* end middleware */
 
@@ -82,7 +79,5 @@ app.use(function(err, req, res, next) {
 app.listen(3000, function() {
 	console.log('Listening on port 3000');
 });
-
-
 
 module.exports = app;
