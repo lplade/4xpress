@@ -2,45 +2,28 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var passport = require('passport'),
-	LocalStrategy = require('passport-local').Strategy;
+var passport = require('passport');
 var parseurl = require('parseurl');
 var mongoose = require('mongoose');
 var session = require('express-session');
-var MongoDBStore = require('connect-mongodb-session')(session);
+//var MongoStore = require('connect-mongo')(session);
 
 var app = express();
+
+var configDB = require('./config/db');
+
+mongoose.connect(configDB.url);
+require('./config/passport')(passport);
+
 app.use(logger('dev'));
-
-// connect to session db
-var store = new MongoDBStore(
-	{
-		uri:'mongodb://localhost:27017/4x_session_db',
-		collection:'mySessions'
-	}
-);
-
-store.on('error', function(error){
-	assert.ifError(error);
-	assert.ok(false);
-});
-
-app.use(session({
-	secret: "T0T4L_P4WN4G3", //TODO replace with real random number
-	store: store,
-	resave: false, //stop warnings
-	saveUnitialized: false //stop warnings
-}));
 
 // ** Routers **
 var routes = require('./routes/index');
 var gamelist = require('./routes/gamelist');
 var users = require('./routes/users');
-
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -53,25 +36,27 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
+
+app.use(session(
+	{
+		secret: "T0T4L_P4WN4G3" //TODO replace with real random number
+	}
+));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash()); //connect-flash
+
+// -- routes --
 app.use('/', routes);
 app.use('/gamelist', gamelist);
 app.use('/users', users);
 
-//Passport-local
-passport.use(new LocalStrategy(
-	function(username, password, done) {
-		User.findOne({ username: username }, function (err, user) {
-			if (err) { return done(err); }
-			if (!user) {
-				return done(null, false, { message: 'Incorrect username.' });
-			}
-			if (!user.validPassword(password)) {
-				return done(null, false, { message: 'Incorrect password.' });
-			}
-			return done(null, user);
-		});
-	}
-));
+store.on('error', function(error){
+	assert.ifError(error);
+	assert.ok(false);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
