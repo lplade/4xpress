@@ -1,13 +1,27 @@
 //app-wide constants
 const APPNAME = "Space Jarl";
+const PORT = process.env.PORT || 3000;
 
 //npm dependencies
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var morgan = require('morgan');
 
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash = require('connect-flash');
+
 var app = express();
+
+// set up database connection
+var configDB = require('./config/database');
+mongoose.connect(configDB.url);
+var User = require('./models/user');
+
+//require('./config/passport')(passport);
 
 // view engine
 app.set('views', path.join(__dirname, 'views'));
@@ -24,10 +38,27 @@ app.use(morgan('dev'));
 //basic body parsing stuff
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // Set up static files
 app.use(express.static(path.join(__dirname + '/public')));
-console.log(path.join(__dirname + '/public'));
+
+//set up passport
+app.use(session({secret: 'T0T4L_PWN4G3'}));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); //use connect-flash for flash messages stored
+
+//TODO move this into router
+function isLoggedIn(req, res, next) {
+	
+	//if user is authenticated in the session, carry on
+	if (req.isAuthenticated())
+		return next();
+	
+	// if they aren't, redirect to... home page?
+	res.redirect('/');
+}
 
 /* end middleware */
 
@@ -38,10 +69,32 @@ app.get('/', function (req, res){
 	res.render('index', {title: APPNAME});
 });
 
-app.get('/users/:id', function (req, res){
+app.get('/login', function(req, res){
+	res.render('login', { message: req.flash('loginMessage')});
+});
+
+//TODO app.post login
+
+app.get('/signup', function(req,res){
+	res.render('signup', {message: req.flash('signupMessage')});
+});
+
+//TODO app.post signup
+
+//user profile - require auth
+app.get('/users/:user_id', isLoggedIn, function (req, res){
 	var id = req.params.id;
 	res.render('users', {title : APPNAME, uid: id });
 });
+
+app.get('/logout', function(req, res) {
+	req.logout();
+	res.redirect('/');
+});
+
+//TODO /game - list of games
+
+//TODO /game/:game_id - the main game interface - require auth
 
 /* end routers */
 
@@ -76,8 +129,6 @@ app.use(function(err, req, res, next) {
 	});
 });
 
-app.listen(3000, function() {
-	console.log('Listening on port 3000');
+app.listen(PORT, function() {
+	console.log('Listening on port ' + PORT);
 });
-
-module.exports = app;
