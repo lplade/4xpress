@@ -50,17 +50,13 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); //use connect-flash for flash messages stored
 
-
-
-
 /* end middleware */
 
 /*
  === ROUTERS ===
  */
+
 require('./routes')(app, passport);
-
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
