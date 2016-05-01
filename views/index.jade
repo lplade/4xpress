@@ -11,10 +11,10 @@ block content
 				img.img-responsive(src="https://spaceholder.cc/800x600")
 			.col-md-4
 				p.lead Compelling description goes here
-				a.btn.btn-default(href="/login")
+				a.btn.btn-default.btn-block(href="/login")
+					span.glyphicon.glyphicon-log-in
+					!= ' Log in'
+				a.btn.btn-default.btn-block(href="/signup")
 					span.glyphicon.glyphicon-user
-					| #{' '}Log in
-				a.btn.btn-default(href="/signup")
-					span.glyphicon.glyphicon-user
-					| #{' '}Sign up
+					!= ' Sign up'
 

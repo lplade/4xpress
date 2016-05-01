@@ -1,5 +1,5 @@
-- var isLoggedIn = true //for testing
-- var username = 'Admiral Akbar' // for testing
+//- var isLoggedIn = true //for testing
+//- var username = 'Admiral Akbar' // for testing
 nav.navbar.navbar-default.navbar-fixed-bottom
 	.container-fluid
 		.navbar-header
@@ -15,7 +15,7 @@ nav.navbar.navbar-default.navbar-fixed-bottom
 						span.glyphicon.glyphicon-log-out
 						| #{' '}Sign out
 			else
-				form.navbar-form.navbar-right(role="login")
+				form.navbar-form.navbar-right(action='login' method='post' role="login")
 					.form-group.form-group-sm
 						input.form-control(type="text" placeholder="Username")
 						| #{' '}

@@ -5,6 +5,7 @@ block content
 		h1.page-header.alert.alert-danger
 			span.glyphicon.glyphicon-alert
 			| #{' '}#{message}
-		h2 HTTP #{error.status}
+		if error.status
+			h2 HTTP #{error.status}
 		p Traceback
 		pre #{error.stack}

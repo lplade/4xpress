@@ -1,0 +1,33 @@
+extends layout
+
+block content
+	.container
+		.row
+			.col-md-6.hidden-sm.hidden-xs
+				img.img-responsive(src="https://spaceholder.cc/600x1000")
+			.col-md-6
+				h1.page-header.text-uppercase= title
+				h2 Sign up for an account
+
+				if message
+					p.alert-danger= message
+
+				form(action='/signup' method='post')
+					div.form-group
+						label User name
+						input.form-control(type='text' name='username' placeholder='User name' required)
+						span.help-block Your user handle
+					div.form-group
+						label E-mail
+						input.form-control(type='email' name='email' placeholder='starlord@example.com' required)
+						span.help-block A valid e-mail address
+					div.form-group
+						label Password
+						input.form-control(type='password' name='password' placeholder='Password' required)
+						span.help-block A hard-to-guess password
+					button.btn.btn-default(type='submit' name='signup')
+						span.glyphicon.glyphicon-user
+						!= ' Sign up'
+
+				p.small.text-info Already have an account?
+					a(href='/login')= ' Sign in here'

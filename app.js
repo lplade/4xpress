@@ -1,6 +1,6 @@
 //app-wide constants
-const APPNAME = "Space Jarl";
-const PORT = process.env.PORT || 3000;
+const APPNAME = require('./config/globals').APPNAME;
+const PORT = require('./config/globals').PORT;
 
 //npm dependencies
 var express = require('express');
@@ -19,10 +19,10 @@ var app = express();
 // set up database connection
 var configDB = require('./config/database');
 mongoose.connect(configDB.url);
-var User = require('./models/user');
+//var User = require('./models/user');
 //var Game = require('./models/game');
 
-//require('./config/passport')(passport);
+
 
 // view engine
 app.set('views', path.join(__dirname, 'views'));
@@ -46,6 +46,8 @@ app.use(express.static(path.join(__dirname + '/public')));
 
 //set up passport
 app.use(session({secret: 'T0T4L_PWN4G3'}));
+// Include passport authentication function
+require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); //use connect-flash for flash messages stored
@@ -57,6 +59,8 @@ app.use(flash()); //use connect-flash for flash messages stored
  */
 
 require('./routes')(app, passport);
+
+/* end routers */
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
