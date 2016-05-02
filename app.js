@@ -22,8 +22,6 @@ mongoose.connect(configDB.url);
 //var User = require('./models/user');
 //var Game = require('./models/game');
 
-
-
 // view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

@@ -5,7 +5,8 @@ var UserSchema = new mongoose.Schema({
 	username: {
 		type: String,
 		unique: true,
-		required: true
+		required: true,
+		lowercase: true
 	},
 	password: {
 		type: String,
@@ -15,7 +16,8 @@ var UserSchema = new mongoose.Schema({
 		//TODO validate for valid email address
 		type: String,
 		unique: true,
-		required: true
+		required: true,
+		lowercase: true
 	}
 });
 

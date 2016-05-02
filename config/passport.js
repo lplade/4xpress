@@ -1,5 +1,4 @@
 var LocalStrategy = require('passport-local').Strategy;
-
 var User = require('../models/user');
 
 module.exports = function (passport) {
@@ -22,7 +21,7 @@ module.exports = function (passport) {
 		emailField: 'email',
 		passwordField: 'password',
 		passReqToCallback: true
-	}, function (req, username, password, done) {
+	}, function (req, username, password, email, done) {
 		//one the current event loop turn runs to completion, call the callback funtion
 		process.nextTick(function () {
 
@@ -54,4 +53,5 @@ module.exports = function (passport) {
 			})
 		})
 	}));
+	
 };

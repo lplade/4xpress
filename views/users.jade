@@ -1,0 +1,17 @@
+extends layout
+
+block content
+	.container
+		h1.page-header= title
+
+		.users
+			table.table.table-striped
+				thead
+					td User name
+					td ID
+				for user in users
+					tr
+						td #{user.username}
+						td #{user._id}
+
+
