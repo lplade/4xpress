@@ -1,13 +1,14 @@
 var mongoose = require('mongoose');
+var User = require('./models/user');
 
-var PlayerSchema = new mongoose.Schema({
-	_playerId: Schema.Types.ObjectId, // _id from user schema
+var PlayerSchema = mongoose.Schema({
+	_playerId: User.Types.ObjectId, // _id from user schema
 	newTurn: {
 		//TODO store the instructions for each player's pending moves here
 	}
 });
 var GameSchema = new mongoose.Schema({
-	creatorId: Schema.Types.ObjectId, //id of player that created game
+	creatorId: User.Types.ObjectId, //id of player that created game
 	players: [PlayerSchema],
 	dateCreated: { type: Date, default: Date.now },
 	dateLastTurnGen: Date,

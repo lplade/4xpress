@@ -3,10 +3,14 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var User = require('./models/user');
+//var Game = require('./models/game');
 
 
 router.get('/', function (req, res) {
-	res.render('index', {title: APPNAME});
+	console.log('req.user=' + req.user); //show me what is in req.user
+	res.render('index', {
+		title: APPNAME
+	});
 });
 
 router.get('/login', function (req, res) {
@@ -16,7 +20,7 @@ router.get('/login', function (req, res) {
 	});
 });
 router.post('/login', passport.authenticate('local-login', {
-	successRedirect: '/games',
+	successRedirect: '/users', // + req.user.id, Custom callback needed?
 	failureRedirect: '/login',
 	failureFlash: true
 }));
@@ -31,7 +35,7 @@ router.get('/signup', function (req, res) {
 });
 
 router.post('/signup', passport.authenticate('local-signup', {
-	successRedirect: '/',
+	successRedirect: '/users', // + req.user.id,
 	failureRedirect: '/signup',
 	failureFlash: true
 }));
@@ -53,13 +57,24 @@ router.get('/users', function (req, res, next) {
 //user profile - require auth
 router.get('/users/:user_id', isLoggedIn, function (req, res, next) {
 	//var id = req.params.id;
-	User.findById(req.params.id, function (err, user) {
-		if (err)
-			res.send(err);
-		//TODO redirect to /users on fail
-		//TODO query for user info, display user profile
-		res.render('userX', {title: APPNAME, uid: user});
-
+	if (req.params.user_id != req.user._id) {
+		console.log('User attempting to access wrong user page');
+		return res.redirect('/users');
+	}
+	User.findById(req.params.user_id, function (err, userDocs) {
+		if (err) {
+			//res.send(err);
+			return next(err);
+			//TODO redirect to /users on fail
+		}
+		//TODO only show to matching authenticated user
+		console.log('Returned ' + userDocs);
+		return res.render('userX', {
+			userData: userDocs,
+			title: APPNAME,
+			error: req.flash('error')
+			//TODO need to pass game info too
+		});
 	});
 });
 
@@ -70,6 +85,12 @@ router.get('/logout', function (req, res) {
 
 //TODO /game - list of games
 router.get('/games', function (req, res) {
+	/*	Game.find(function(err, gameDocs){
+	 if (err) {
+	 return next(err);
+	 }
+	 return res.render('games')
+	 });*/
 	//query and render a list of running games. link into games
 });
 
@@ -79,7 +100,6 @@ router.get('/games/:game_id', isLoggedIn, function (req, res) {
 	res.render('galaxy', {title: APPNAME, game_id: game_id});
 	//TODO redirect to /game on fail
 });
-
 
 
 function isLoggedIn(req, res, next) {

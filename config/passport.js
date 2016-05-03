@@ -22,7 +22,7 @@ module.exports = function (passport) {
 		passwordField: 'password',
 		passReqToCallback: true
 	}, function (req, username, password, done) {
-		//one the current event loop turn runs to completion, call the callback funtion
+		//one the current event loop turn runs to completion, call the callback function
 		process.nextTick(function () {
 
 			//Search for user with this username
@@ -54,6 +54,7 @@ module.exports = function (passport) {
 		})
 	}));
 
+	//TODO make not case sensitive
 	passport.use('local-login', new LocalStrategy({
 			usernameField: 'username',
 			passwordField: 'password',

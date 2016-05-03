@@ -1,0 +1,16 @@
+extends layout
+
+block content
+	.container
+		h1.page-header= title
+
+		ul.list-group
+			li.list-group-item User: #{userData.local.username}
+			li.list-group-item Sign up date: #{userData.signUpDate}
+		p Change password stuff goes here
+		h2 Current games
+		ul.list-group
+			//for game in games
+			li.list-group-item Game1
+
+

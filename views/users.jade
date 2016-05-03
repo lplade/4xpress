@@ -8,10 +8,11 @@ block content
 			table.table.table-striped
 				thead
 					td User name
-					td ID
+					td Joined
 				for user in users
 					tr
-						td #{user.username}
-						td #{user._id}
+						td
+							a(href="/users/#{user._id}") #{user.local.username}
+						td #{user.signUpDate}
 
 
