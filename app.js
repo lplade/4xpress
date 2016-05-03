@@ -14,6 +14,8 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var flash = require('connect-flash');
 
+var routes = require('./routes');
+
 var app = express();
 
 // set up database connection
@@ -56,8 +58,8 @@ app.use(flash()); //use connect-flash for flash messages stored
  === ROUTERS ===
  */
 
-require('./routes')(app, passport);
-
+//require('./routes')(app, passport);
+app.use('/', routes);
 /* end routers */
 
 // catch 404 and forward to error handler
