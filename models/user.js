@@ -1,16 +1,18 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
-var UserSchema = new mongoose.Schema({
-	username: {
-		type: String,
-		unique: true,
-		required: true,
-		lowercase: true
-	},
-	password: {
-		type: String,
-		required: true
+var UserSchema = mongoose.Schema({
+	local: { //local authentication fields
+		username: {
+			type: String,
+			unique: true,
+			required: true,
+			lowercase: true
+		},
+		password: {
+			type: String,
+			required: true
+		}
 	},
 	email: {
 		//TODO validate for valid email address

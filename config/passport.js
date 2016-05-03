@@ -21,7 +21,7 @@ module.exports = function (passport) {
 		//emailField: 'email',
 		passwordField: 'password',
 		passReqToCallback: true
-	}, function (req, username, password, email, done) {
+	}, function (req, username, password, done) {
 		//one the current event loop turn runs to completion, call the callback funtion
 		process.nextTick(function () {
 
@@ -53,4 +53,31 @@ module.exports = function (passport) {
 			})
 		})
 	}));
+
+	passport.use('local-login', new LocalStrategy({
+			usernameField: 'username',
+			passwordField: 'password',
+			passReqToCallback: true
+		},
+
+		function (req, username, password, done) {
+			process.nextTick(function () {
+				User.findOne({'local.username': username}, function (err, user) {
+
+					if (err) {
+						return done(err)
+					}
+					if (!user) {
+						return done(null, false, req.flash('loginMessage', 'User not found'))
+					}
+					//This method is defined in our user.js model.
+					if (!user.validPassword(password)) {
+						return done(null, false, req.flash('loginMessage', 'Wrong password'));
+					}
+
+					return done(null, user);
+				})
+			});
+		}));
+
 };
