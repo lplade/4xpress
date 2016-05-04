@@ -8,10 +8,10 @@ nav.navbar.navbar-default.navbar-fixed-bottom
 			p.navbar-text &copy;2016 l.p.lade
 
 		.pull-right.hidden-xs.hidden-sm
-			if isLoggedIn
+			if userLoggedIn
 				.navbar-right
-					p.navbar-text You are signed in as #{username}
-					a.navbar-btn.btn.btn-default.btn-sm(href="/signout")
+					p.navbar-text You are signed in as #{userLoggedIn}
+					a.navbar-btn.btn.btn-default.btn-sm(href="/logout")
 						span.glyphicon.glyphicon-log-out
 						| #{' '}Sign out
 			else
@@ -24,9 +24,9 @@ nav.navbar.navbar-default.navbar-fixed-bottom
 							span.glyphicon.glyphicon-log-in
 							| #{' '}Sign in
 		.pull-right.visible-xs.visible-sm
-			if isLoggedIn
-				p.navbar-text #{username}
-				a.navbar-btn.btn.btn-default.btn-sm(href="/signout")
+			if userLoggedIn
+				p.navbar-text #{userLoggedIn}
+				a.navbar-btn.btn.btn-default.btn-sm(href="/logout")
 					span.glyphicon.glyphicon-log-out
 			else
 				a.navbar-text(href="/login") Log in

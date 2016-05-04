@@ -6,16 +6,29 @@ var User = require('./models/user');
 //var Game = require('./models/game');
 
 
+router.use(function (req, res, next){
+	if (req.user) {
+		res.locals = {
+			title: APPNAME,
+			userLoggedIn: req.user.local.username
+			// This is so the footer can change depending on whether the user is logged in or not
+		}
+	} else {
+		res.locals = {
+			title: APPNAME
+		}
+	}
+	next();
+});
+
 router.get('/', function (req, res) {
-	console.log('req.user=' + req.user); //show me what is in req.user
-	res.render('index', {
-		title: APPNAME
-	});
+	//console.log('req.user=' + req.user); //show me what is in req.user
+	res.render('index');
 });
 
 router.get('/login', function (req, res) {
+	//TODO do we need to make sure user is not already logged in?
 	res.render('login', {
-		title: APPNAME,
 		message: req.flash('loginMessage')
 	});
 });
@@ -29,7 +42,6 @@ router.post('/login', passport.authenticate('local-login', {
 
 router.get('/signup', function (req, res) {
 	res.render('signup', {
-		title: APPNAME,
 		message: req.flash('signupMessage')
 	});
 });
@@ -48,7 +60,6 @@ router.get('/users', function (req, res, next) {
 		}
 		return res.render('users', {
 			users: userDocs,
-			title: APPNAME,
 			error: req.flash('error')
 		});
 	});
@@ -71,7 +82,6 @@ router.get('/users/:user_id', isLoggedIn, function (req, res, next) {
 		console.log('Returned ' + userDocs);
 		return res.render('userX', {
 			userData: userDocs,
-			title: APPNAME,
 			error: req.flash('error')
 			//TODO need to pass game info too
 		});
@@ -97,7 +107,9 @@ router.get('/games', function (req, res) {
 //TODO /game/:game_id - the main game interface - require auth
 router.get('/games/:game_id', isLoggedIn, function (req, res) {
 	//TODO query all necessary bits of game, pass to renderer
-	res.render('galaxy', {title: APPNAME, game_id: game_id});
+	res.render('galaxy', {
+		game_id: game_id
+	});
 	//TODO redirect to /game on fail
 });
 
