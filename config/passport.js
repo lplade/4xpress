@@ -63,7 +63,7 @@ module.exports = function (passport) {
 
 		function (req, username, password, done) {
 			process.nextTick(function () {
-				User.findOne({'local.username': username}, function (err, user) {
+				User.findOne({'local.username': username.toLowerCase()}, function (err, user) {
 
 					if (err) {
 						return done(err)
@@ -75,7 +75,6 @@ module.exports = function (passport) {
 					if (!user.validPassword(password)) {
 						return done(null, false, req.flash('loginMessage', 'Wrong password'));
 					}
-
 					return done(null, user);
 				})
 			});

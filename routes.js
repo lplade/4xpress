@@ -124,8 +124,6 @@ router.post('/newgame', isLoggedIn, function(req, res){
 	//TODO populate fields in game and player collections
 });
 
-
-
 // HELPER FUNCTIONS
 function isLoggedIn(req, res, next) {
 	//if user is authenticated in the session, carry on
