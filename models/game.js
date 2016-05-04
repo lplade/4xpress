@@ -1,22 +1,30 @@
-var mongoose = require('mongoose');
-var User = require('./models/user');
+var mongoose = require('mongoose'),
+	Schema = mongoose.Schema;
+var User = require('./user');
 
-var PlayerSchema = mongoose.Schema({
-	_playerId: User.Types.ObjectId, // _id from user schema
+var PlayerSchema = Schema({
+	_playerId: [{
+		type: Schema.Types.ObjectId,
+		ref: 'User'
+	}],
+	//User.Types.ObjectId, // _id from user schema
 	newTurn: {
 		//TODO store the instructions for each player's pending moves here
 	}
 });
-var GameSchema = new mongoose.Schema({
+var GameSchema = Schema({
 	creatorId: User.Types.ObjectId, //id of player that created game
-	players: [PlayerSchema],
+	players: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Player'
+	}],
 	dateCreated: { type: Date, default: Date.now },
 	dateLastTurnGen: Date,
 	maxTurnDuration: Number, //when to generate new turn //TODO figure out intervals
 	galaxyData: {
-		//TODO all the data for the map goes in here
+		//TODO all the data for the map goes in here - yet another Schema?
 	}
 });
 
-
+module.exports = mongoose.model('Player', PlayerSchema);
 module.exports = mongoose.model('Game', GameSchema);

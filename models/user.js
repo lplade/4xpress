@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
-var UserSchema = mongoose.Schema({
+var UserSchema = new mongoose.Schema({
 	local: { //local authentication fields
 		username: {
 			type: String,
 			unique: true,
 			required: true,
-			lowercase: true
+			lowercase: true //store lowercase best option?
 		},
 		password: {
 			type: String,
