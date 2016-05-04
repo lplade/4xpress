@@ -5,7 +5,7 @@ var passport = require('passport');
 var User = require('./models/user');
 //var Game = require('./models/game');
 
-
+// Middleware for all routes
 router.use(function (req, res, next){
 	if (req.user) {
 		res.locals = {
@@ -110,10 +110,23 @@ router.get('/games/:game_id', isLoggedIn, function (req, res) {
 	res.render('galaxy', {
 		game_id: game_id
 	});
-	//TODO redirect to /game on fail
+	//TODO redirect to /game on fail - see GET /user/:user_id
+});
+
+router.get('/newgame', isLoggedIn, function(req, res){
+	//TODO need to query and send list of users
+	res.render('newgame', {
+		creatingUser: req.user._id
+	});
+});
+
+router.post('/newgame', isLoggedIn, function(req, res){
+	//TODO populate fields in game and player collections
 });
 
 
+
+// HELPER FUNCTIONS
 function isLoggedIn(req, res, next) {
 	//if user is authenticated in the session, carry on
 	if (req.isAuthenticated()) {

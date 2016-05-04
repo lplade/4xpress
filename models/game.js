@@ -21,7 +21,7 @@ var GameSchema = Schema({
 	dateCreated: { type: Date, default: Date.now },
 	dateLastTurnGen: Date,
 	maxTurnDuration: Number, //when to generate new turn //TODO figure out intervals
-	galaxyData: {
+	galaxyData: { 
 		//TODO all the data for the map goes in here - yet another Schema?
 	}
 });

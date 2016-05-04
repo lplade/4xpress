@@ -1,0 +1,42 @@
+extends layout
+
+block content
+	.container
+		.row
+			.col-md-6.hidden-sm.hidden-xs
+				//.spaceholder &nbsp;
+				img.img.img-responsive(src="https://spaceholder.cc/600x1000" alt="")
+			.col-md-6
+				h1.page-header.text-uppercase= title
+				h2 Create a game
+				form
+					.form-group
+						label Game name
+						input.form-control(type="text" name="gamename" placeholder="Game name")
+						span.help-block Make up a creative title for your game
+					.form-group
+						label Player 1
+						select.form-control.disabled(name="player1")
+							option(value="#{creatingUser._id}" selected) #{creatingUser.local.username}
+					.form-group
+						label Player 2
+						select.form-control(name="player2")
+							option(value="NOPLAYER" selected) --None--
+							for player in players
+								option(value="#{player._id}") #{player.local.username}
+					.form-group
+						label Player 3
+						select.form-control(name="player3")
+							option(value="NOPLAYER" selected) --None--
+							for player in players
+								option(value="#{player._id}") #{player.local.username}
+					.form-group
+						label Player 4
+						select.form-control(name="player4")
+							option(value="NOPLAYER" selected) --None--
+							for player in players
+								option(value="#{player._id}") #{player.local.username}
+					.form-group
+						p Put some more options here
+					button.btn.btn-default(type='submit' name='newgame') Create new game
+					//TODO Client-side JS validation to make sure no player is listed not more than once?
