@@ -1,0 +1,13 @@
+{
+  "creatorID" : 123456789, // represents mongoose.Schema.Types.ObjectId
+  "players" : [{"id" : 1234567890}, {"id" : 2345678901}],
+  "dateCreated" : "12/12/16 043405 UTC",
+  "dateLastTurnGen" : "12/25/16 113455 UTC",
+  "maxTurnDuration" : 600000,
+  "galaxyData" : {
+    "stars" : [{
+      "xcoord" : 34,
+      "ycoord" : 12
+    }]
+  }
+}

@@ -122,6 +122,10 @@ router.get('/newgame', isLoggedIn, function(req, res){
 
 router.post('/newgame', isLoggedIn, function(req, res){
 	//TODO populate fields in game and player collections
+	//create the game
+	//for each player in the game
+	//create a Player
+
 });
 
 // HELPER FUNCTIONS

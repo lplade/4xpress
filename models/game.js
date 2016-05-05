@@ -3,14 +3,16 @@ var mongoose = require('mongoose'),
 var User = require('./user');
 
 // A "player" is a "user" that is assigned to a "game"
+// A player could participate in multiple games, so instance a Player for
 var PlayerSchema = Schema({
 	_playerId: [{
 		type: Schema.Types.ObjectId,
 		ref: 'User'
 	}],
 	//User.Types.ObjectId, // _id from user schema
-	newTurn: {
+	newTurnText: {
 		//TODO store the instructions for each player's pending moves here
+		//for right now, have user enter move as text instructions
 	}
 });
 var GameSchema = Schema({
@@ -26,6 +28,22 @@ var GameSchema = Schema({
 		//TODO all the data for the map goes in here - yet another Schema?
 	}
 });
+
+GameSchema.methods.addPlayer = function (userId) {
+	 User.findOne()
+};
+
+GameSchema.methods.buildMap = function (gridSize, density) {
+	//TODO randomly generate a starmap
+	var gridX = 0, gridY = 0;
+	for (0; gridX < gridSize; gridX++) {
+		for (0; gridY < gridSize; gridY++){
+			if( function(){return Math.random()} < density ){
+				//TODO generate a star at this coordinate
+			}
+		}
+	}
+};
 
 module.exports = mongoose.model('Player', PlayerSchema);
 module.exports = mongoose.model('Game', GameSchema);
