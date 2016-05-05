@@ -30,7 +30,10 @@ var GameSchema = Schema({
 });
 
 GameSchema.methods.addPlayer = function (userId) {
-	 User.findOne()
+	User.findById(userId, function(err, docs) {
+		var newPlayer = new Player;
+	});
+	
 };
 
 GameSchema.methods.buildMap = function (gridSize, density) {

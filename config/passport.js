@@ -1,3 +1,4 @@
+// This is basically Clara's passport config file
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
 
@@ -25,6 +26,7 @@ module.exports = function (passport) {
 		//one the current event loop turn runs to completion, call the callback function
 		process.nextTick(function () {
 
+			//TODO validate email (nest in another callback?)
 			//Search for user with this username
 			User.findOne({'local.username': username}, function (err, user) {
 				if (err) {
@@ -40,8 +42,9 @@ module.exports = function (passport) {
 				//else, the username is available. Create a new user, and save to db
 				var newUser = new User();
 				newUser.local.username = username;
-				//newUser.local.email = email;
 				newUser.local.password = newUser.generateHash(password);
+				newUser.email = req.body.email;
+				//We can get any other signup fields from req.body.XXXX as needed
 
 				newUser.save(function (err) {
 					if (err) {
@@ -53,8 +56,7 @@ module.exports = function (passport) {
 			})
 		})
 	}));
-
-	//TODO make not case sensitive
+	
 	passport.use('local-login', new LocalStrategy({
 			usernameField: 'username',
 			passwordField: 'password',
@@ -79,5 +81,4 @@ module.exports = function (passport) {
 				})
 			});
 		}));
-
 };

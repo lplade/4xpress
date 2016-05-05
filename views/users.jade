@@ -13,6 +13,8 @@ block content
 					tr
 						td
 							a(href="/users/#{user._id}") #{user.local.username}
+						//TODO remove email from production
+						td #{user.email}
 						td #{user.signUpDate}
 
 

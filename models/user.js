@@ -17,8 +17,8 @@ var UserSchema = new mongoose.Schema({
 	email: {
 		//TODO validate for valid email address
 		type: String,
-		lowercase: true,
-		unique: true
+		lowercase: true
+		//, unique: true
 		//, required: true
 	},
 	signUpDate : {

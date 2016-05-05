@@ -114,6 +114,16 @@ router.get('/games/:game_id', isLoggedIn, function (req, res) {
 });
 
 router.get('/newgame', isLoggedIn, function(req, res){
+	User.find(function (err, userDocs) {
+		if (err) {
+			return next(err);
+		}
+		return res.render('newgame', {
+			creatingUser: req.user_id,
+			users: userDocs,
+			error: req.flash('error')
+		});
+	});
 	//TODO need to query and send list of users
 	res.render('newgame', {
 		creatingUser: req.user._id
