@@ -2,6 +2,7 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 var User = require('./user');
 
+// A "player" is a "user" that is assigned to a "game"
 var PlayerSchema = Schema({
 	_playerId: [{
 		type: Schema.Types.ObjectId,
