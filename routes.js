@@ -2,11 +2,13 @@ var APPNAME = require('./config/globals').APPNAME;
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var moment = require('moment');
+
 var User = require('./models/user');
-//var Game = require('./models/game');
+var Game = require('./models/game');
 
 // Middleware for all routes
-router.use(function (req, res, next){
+router.use(function (req, res, next) {
 	if (req.user) {
 		res.locals = {
 			title: APPNAME,
@@ -70,6 +72,7 @@ router.get('/users/:user_id', isLoggedIn, function (req, res, next) {
 	//var id = req.params.id;
 	if (req.params.user_id != req.user._id) {
 		console.log('User attempting to access wrong user page');
+		//TODO can we flash a warning to user after redirecting?
 		return res.redirect('/users');
 	}
 	User.findById(req.params.user_id, function (err, userDocs) {
@@ -94,14 +97,23 @@ router.get('/logout', function (req, res) {
 });
 
 //TODO /game - list of games
-router.get('/games', function (req, res) {
-	/*	Game.find(function(err, gameDocs){
-	 if (err) {
-	 return next(err);
-	 }
-	 return res.render('games')
-	 });*/
-	//query and render a list of running games. link into games
+router.get('/games', function (req, res, next) {
+	Game.find(function (err, gameDocs) {
+		if (err) {
+			return next(err);
+		}
+		//do some math on query to pass to renderer
+		var numPlayers = gameDocs.players.length();
+		var timeRemaining = gameDocs.nextTurnGenTime - Date.now();
+		var timeRemainingStr = moment(timeRemaining).format('MMM HH:mm z');
+
+		return res.render('games', {
+			games: gameDocs,
+			numPlayers: numPlayers,
+			timeRemaining: timeRemainingStr,
+			error: req.flash('error');
+		})
+	});
 });
 
 //TODO /game/:game_id - the main game interface - require auth
@@ -113,7 +125,7 @@ router.get('/games/:game_id', isLoggedIn, function (req, res) {
 	//TODO redirect to /game on fail - see GET /user/:user_id
 });
 
-router.get('/newgame', isLoggedIn, function(req, res){
+router.get('/newgame', isLoggedIn, function (req, res) {
 	User.find(function (err, userDocs) {
 		if (err) {
 			return next(err);
@@ -124,18 +136,19 @@ router.get('/newgame', isLoggedIn, function(req, res){
 			error: req.flash('error')
 		});
 	});
-	//TODO need to query and send list of users
-	res.render('newgame', {
-		creatingUser: req.user._id
-	});
 });
 
-router.post('/newgame', isLoggedIn, function(req, res){
+router.post('/newgame', isLoggedIn, function (req, res) {
 	//TODO populate fields in game and player collections
 	//create the game
 	//for each player in the game
 	//create a Player
 
+
+});
+
+router.get('/galtest', function (req, res) {
+	res.render('galaxy');
 });
 
 // HELPER FUNCTIONS

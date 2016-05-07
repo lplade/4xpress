@@ -3,18 +3,21 @@ extends layout
 block content
 	.container
 		h1.page-header.text-uppercase= title
-
+		if message
+			h2.alert-warning= message
 		.users
+			h2 Users
 			table.table.table-striped
 				thead
 					td User name
+					td Email
 					td Joined
 				for user in users
 					tr
 						td
 							a(href="/users/#{user._id}") #{user.local.username}
 						//TODO remove email from production
-						td #{user.email}
-						td #{user.signUpDate}
+						td= user.email
+						td= user.signUpDate
 
 

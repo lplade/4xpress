@@ -44,7 +44,7 @@ module.exports = function (passport) {
 				newUser.local.username = username;
 				newUser.local.password = newUser.generateHash(password);
 				newUser.email = req.body.email;
-				//We can get any other signup fields from req.body.XXXX as needed
+				//Note: We can get any other signup fields from req.body.XXXX as needed
 
 				newUser.save(function (err) {
 					if (err) {

@@ -1,4 +1,22 @@
 extends layout
 
 block content
+	.container
+		h1.page-header.text-uppercase= title
+		if message
+			h2.alert-warning= message
+		.games
+			h2 Games
+			table.table.table-striped
+				thead
+					td Game name
+					td Number of players
+					td Turn
+					td Time until next turn
+				for game in games
+					td
+						a(href="/games/#{game._id}") #{game.gameName}
+					td= numPlayers
+					td= game.currentTurnNumber
+					td= timeRemaining
 
