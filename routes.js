@@ -176,6 +176,7 @@ router.post('/newgame', isLoggedIn, function (req, res) {
 	});
 });
 
+//TODO UI prototype - delete this
 router.get('/galtest', function (req, res) {
 	res.render('galaxy');
 });

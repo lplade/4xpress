@@ -3,17 +3,31 @@ extends layout
 block content
 	.container
 		h1.page-header.text-uppercase= title
-		h2 User profile
+		.row
+			.col-md-6
+				.uprofile
+					h2 User profile
+					ul.list-group
+						li.list-group-item User: #{userData.local.username}
+						//TODO remove email address from production
+						li.list-group-item Email: #{userData.email}
+						li.list-group-item Sign up date: #{userData.signUpDate}
+						p Change password stuff goes here
+			.col-md-6
+				.currgames
+					h2 Current games
+					ul.list-group
+						//for game in games
+						li.list-group-item Game1
+				.newgame
+					a.btn.btn-default.btn-block(href="/newgame")
+						span.glyphicon.glyphicon-plus
+						!= ' Create a new game'
 
-		ul.list-group
-			li.list-group-item User: #{userData.local.username}
-			//TODO remove email address from production
-			li.list-group-item Email: #{userData.email}
-			li.list-group-item Sign up date: #{userData.signUpDate}
-		p Change password stuff goes here
-		h2 Current games
-		ul.list-group
-			//for game in games
-			li.list-group-item Game1
+
+
+
+
+
 
 

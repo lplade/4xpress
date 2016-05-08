@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var morgan = require('morgan');
+var favicon = require('serve-favicon');
 
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -32,6 +33,9 @@ app.set('view engine', 'jade');
  === MIDDLEWARE ===
  */
 
+//Hit favicon middleware first, before loggers
+app.use(favicon(__dirname + '/public/favicon.ico'));
+
 // development-level logging
 app.use(morgan('dev'));
 //TODO change to 'combined' for production
@@ -43,6 +47,7 @@ app.use(cookieParser());
 
 // Set up static files
 app.use(express.static(path.join(__dirname + '/public')));
+
 
 //set up passport
 app.use(session({
