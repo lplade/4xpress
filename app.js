@@ -45,7 +45,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname + '/public')));
 
 //set up passport
-app.use(session({secret: 'T0T4L_PWN4G3'}));
+app.use(session({
+	secret: 'T0T4L_PWN4G3',
+	resave: true,
+	saveUninitialized: true
+}));
 // Include passport authentication function
 require('./config/passport')(passport);
 app.use(passport.initialize());

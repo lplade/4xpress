@@ -15,12 +15,12 @@ nav.navbar.navbar-default.navbar-fixed-bottom
 						span.glyphicon.glyphicon-log-out
 						| #{' '}Sign out
 			else
-				form.navbar-form.navbar-right(action='login' method='post' role="login")
+				form.navbar-form.navbar-right(action='/login' method='post' role="login")
 					.form-group.form-group-sm
-						input.form-control(type="text" placeholder="Username")
+						input.form-control(type="text" name="username" placeholder="Username")
 						| #{' '}
-						input.form-control(type="password" placeholder="Password")
-						button.btn.btn-default.btn-sm(type="submit")
+						input.form-control(type="password" name="password" placeholder="Password")
+						button.btn.btn-default.btn-sm(type="submit" name="login")
 							span.glyphicon.glyphicon-log-in
 							| #{' '}Sign in
 		.pull-right.visible-xs.visible-sm

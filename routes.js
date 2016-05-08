@@ -2,11 +2,13 @@ var APPNAME = require('./config/globals').APPNAME;
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var moment = require('moment-timezone');
+
 var User = require('./models/user');
-//var Game = require('./models/game');
+var Game = require('./models/game');
 
 // Middleware for all routes
-router.use(function (req, res, next){
+router.use(function (req, res, next) {
 	if (req.user) {
 		res.locals = {
 			title: APPNAME,
@@ -70,6 +72,7 @@ router.get('/users/:user_id', isLoggedIn, function (req, res, next) {
 	//var id = req.params.id;
 	if (req.params.user_id != req.user._id) {
 		console.log('User attempting to access wrong user page');
+		//TODO can we flash a warning to user after redirecting?
 		return res.redirect('/users');
 	}
 	User.findById(req.params.user_id, function (err, userDocs) {
@@ -94,14 +97,23 @@ router.get('/logout', function (req, res) {
 });
 
 //TODO /game - list of games
-router.get('/games', function (req, res) {
-	/*	Game.find(function(err, gameDocs){
-	 if (err) {
-	 return next(err);
-	 }
-	 return res.render('games')
-	 });*/
-	//query and render a list of running games. link into games
+router.get('/games', function (req, res, next) {
+	Game.find(function (err, gameDocs) {
+		if (err) {
+			return next(err);
+		}
+		//do some math on query to pass to renderer
+		var numPlayers = gameDocs.players.length();
+		var timeRemaining = gameDocs.nextTurnGenTime - Date.now();
+		var timeRemainingStr = moment(timeRemaining).format('HH:mm:ss');
+
+		return res.render('games', {
+			games: gameDocs,
+			numPlayers: numPlayers,
+			timeRemaining: timeRemainingStr,
+			error: req.flash('error')
+		})
+	});
 });
 
 //TODO /game/:game_id - the main game interface - require auth
@@ -113,22 +125,60 @@ router.get('/games/:game_id', isLoggedIn, function (req, res) {
 	//TODO redirect to /game on fail - see GET /user/:user_id
 });
 
-router.get('/newgame', isLoggedIn, function(req, res){
-	//TODO need to query and send list of users
-	res.render('newgame', {
-		creatingUser: req.user._id
+router.get('/newgame', isLoggedIn, function (req, res) {
+	User.find(function (err, userDocs) {
+		if (err) {
+			return next(err);
+		}
+		var currentTime = Date.now();
+		var curretnTimeStr = moment(currentTime).format('Y-MMM-DD HH:mm:ss ZZ')
+		return res.render('newgame', {
+			creatingUser: req.user_id,
+			users: userDocs,
+			error: req.flash('error')
+		});
 	});
 });
 
-router.post('/newgame', isLoggedIn, function(req, res){
+router.post('/newgame', isLoggedIn, function (req, res) {
 	//TODO populate fields in game and player collections
+	
+
+	var newGame = new Game(req.body);
+
 	//create the game
 	//for each player in the game
 	//create a Player
 
+	var gridSize = 8; //TODO make this user configurable in form
+	var density = 1/3; //TODO make this user configurable
+
+	newGame.buildMap(gridSize, density);
+
+	newGame.save(function(err){
+		//Handle validation errors
+		if(err) {
+			if (err.name = "ValidationError") {
+				req.flash('error', 'Invalid data');
+				return res.redirect('/newgame');
+			}
+			//Handle duplication errors
+			if (err.code == 11000) {
+				req.flash('error', 'THING already exists');
+				return res.redirect('/newgame');
+			}
+			//Other error
+			return next(err);
+		}
+		//If no error, game created. Redirect...
+		res.staus(201); //HTTP "Created"
+		return res.redirect('/games');
+	});
 });
 
-
+router.get('/galtest', function (req, res) {
+	res.render('galaxy');
+});
 
 // HELPER FUNCTIONS
 function isLoggedIn(req, res, next) {
