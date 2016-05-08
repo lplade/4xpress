@@ -2,7 +2,7 @@ var APPNAME = require('./config/globals').APPNAME;
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-var moment = require('moment');
+var moment = require('moment-timezone');
 
 var User = require('./models/user');
 var Game = require('./models/game');
@@ -105,13 +105,13 @@ router.get('/games', function (req, res, next) {
 		//do some math on query to pass to renderer
 		var numPlayers = gameDocs.players.length();
 		var timeRemaining = gameDocs.nextTurnGenTime - Date.now();
-		var timeRemainingStr = moment(timeRemaining).format('MMM HH:mm z');
+		var timeRemainingStr = moment(timeRemaining).format('HH:mm:ss');
 
 		return res.render('games', {
 			games: gameDocs,
 			numPlayers: numPlayers,
 			timeRemaining: timeRemainingStr,
-			error: req.flash('error');
+			error: req.flash('error')
 		})
 	});
 });
@@ -130,6 +130,8 @@ router.get('/newgame', isLoggedIn, function (req, res) {
 		if (err) {
 			return next(err);
 		}
+		var currentTime = Date.now();
+		var curretnTimeStr = moment(currentTime).format('Y-MMM-DD HH:mm:ss ZZ')
 		return res.render('newgame', {
 			creatingUser: req.user_id,
 			users: userDocs,
@@ -140,11 +142,38 @@ router.get('/newgame', isLoggedIn, function (req, res) {
 
 router.post('/newgame', isLoggedIn, function (req, res) {
 	//TODO populate fields in game and player collections
+	
+
+	var newGame = new Game(req.body);
+
 	//create the game
 	//for each player in the game
 	//create a Player
 
+	var gridSize = 8; //TODO make this user configurable in form
+	var density = 1/3; //TODO make this user configurable
 
+	newGame.buildMap(gridSize, density);
+
+	newGame.save(function(err){
+		//Handle validation errors
+		if(err) {
+			if (err.name = "ValidationError") {
+				req.flash('error', 'Invalid data');
+				return res.redirect('/newgame');
+			}
+			//Handle duplication errors
+			if (err.code == 11000) {
+				req.flash('error', 'THING already exists');
+				return res.redirect('/newgame');
+			}
+			//Other error
+			return next(err);
+		}
+		//If no error, game created. Redirect...
+		res.staus(201); //HTTP "Created"
+		return res.redirect('/games');
+	});
 });
 
 router.get('/galtest', function (req, res) {
