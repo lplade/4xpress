@@ -47,5 +47,5 @@ GameSchema.methods.buildMap = function (gridSize, density) {
 	}
 };
 
-module.exports = mongoose.model('Player', PlayerSchema);
+//module.exports = mongoose.model('Player', PlayerSchema);
 module.exports = mongoose.model('Game', GameSchema);

@@ -2,15 +2,19 @@ extends layout
 
 block content
 	.container
-		h1.page-header.alert.alert-danger
-			span.glyphicon.glyphicon-alert
-			| #{' '}#{message}
-		if error.status
-			h2 HTTP #{error.status}
-		.with-caption
-			img.img-responsive(src="/img/32709-wallpaper1.jpg" alt="Cygnus X-1")
-			p.small.text-info= 'Image credit '
-			a(href="http://sci.esa.int/integral/32709-artist-s-impression-of-cygnus-x-1/") ESA
-		p Traceback
-		pre #{error.stack}
+		.row
+			.col-md-6
+				h1.page-header.alert.alert-danger
+					span.glyphicon.glyphicon-alert
+					| #{' '}#{message}
+				if error.status
+					h2.text-warning HTTP #{error.status}
+			.col-md-6
+				.with-caption
+					img.img-responsive(src="/img/32709-wallpaper1.jpg" alt="Cygnus X-1")
+					p.small.text-info.pull-right= 'Image credit '
+						a(href="http://sci.esa.int/integral/32709-artist-s-impression-of-cygnus-x-1/") ESA
+		.row
+			p Traceback
+			pre #{error.stack}
 

@@ -3,9 +3,11 @@
 
 4x strategy game framework implemented in node.js/Express
 
+Requires npm and mongodb
+
 Inspirations:
-- Master of Orion
-- Stars!
+- [Master of Orion](http://www.mobygames.com/game/master-of-orion)
+- [Stars!](https://en.wikipedia.org/wiki/Stars!)
 - [Stars! Authohost](http://starsautohost.org/stars.htm)
 
 Helpful:
