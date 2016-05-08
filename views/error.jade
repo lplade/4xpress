@@ -7,5 +7,10 @@ block content
 			| #{' '}#{message}
 		if error.status
 			h2 HTTP #{error.status}
+		.with-caption
+			img.img-responsive(src="/img/32709-wallpaper1.jpg" alt="Cygnus X-1")
+			p.small.text-info= 'Image credit '
+			a(href="http://sci.esa.int/integral/32709-artist-s-impression-of-cygnus-x-1/") ESA
 		p Traceback
 		pre #{error.stack}
+
