@@ -19,6 +19,9 @@ var routes = require('./routes');
 
 var app = express();
 
+//Leave client-side source human-readable
+app.locals.pretty = true;
+
 // set up database connection
 var configDB = require('./config/database');
 mongoose.connect(configDB.url);
