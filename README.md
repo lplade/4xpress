@@ -5,6 +5,8 @@
 
 Requires npm and mongodb
 
+If env variable 'development' is set you get more debug information
+
 Inspirations:
 - [Master of Orion](http://www.mobygames.com/game/master-of-orion)
 - [Stars!](https://en.wikipedia.org/wiki/Stars!)
