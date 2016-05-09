@@ -130,10 +130,10 @@ router.get('/newgame', isLoggedIn, function (req, res) {
 		if (err) {
 			return next(err);
 		}
-		var currentTime = Date.now();
-		var currentTimeStr = moment(currentTime).tz(TZ).format('Y-MMM-DD HH:mm:ss ZZ');
+		//var currentTime = Date.now();
+		//var currentTimeStr = moment(currentTime).tz(TZ).format('Y-MMM-DD HH:mm:ss ZZ');
 		return res.render('newgame', {
-			creatingUser: req.user_id,
+			creatingUser: req.user,
 			users: userDocs,
 			error: req.flash('error')
 		});
@@ -142,38 +142,41 @@ router.get('/newgame', isLoggedIn, function (req, res) {
 
 router.post('/newgame', isLoggedIn, function (req, res) {
 	//TODO populate fields in game and player collections
-	
 
-	var newGame = new Game(req.body);
+	console.log(req.body);
 
-	//create the game
-	//for each player in the game
-	//create a Player
 
-	var gridSize = 8; //TODO make this user configurable in form
-	var density = 1/3; //TODO make this user configurable
-
-	newGame.buildMap(gridSize, density);
-
-	newGame.save(function(err){
-		//Handle validation errors
-		if(err) {
-			if (err.name = "ValidationError") {
-				req.flash('error', 'Invalid data');
-				return res.redirect('/newgame');
-			}
-			//Handle duplication errors
-			if (err.code == 11000) {
-				req.flash('error', 'THING already exists');
-				return res.redirect('/newgame');
-			}
-			//Other error
-			return next(err);
-		}
-		//If no error, game created. Redirect...
-		res.staus(201); //HTTP "Created"
-		return res.redirect('/games');
-	});
+	//
+	// var newGame = new Game(req.body);
+	//
+	// //create the game
+	// //for each player in the game
+	// //create a Player
+	//
+	// var gridSize = 8; //TODO make this user configurable in form
+	// var density = 1/3; //TODO make this user configurable
+	//
+	// newGame.buildMap(gridSize, density);
+	//
+	// newGame.save(function(err){
+	// 	//Handle validation errors
+	// 	if(err) {
+	// 		if (err.name = "ValidationError") {
+	// 			req.flash('error', 'Invalid data');
+	// 			return res.redirect('/newgame');
+	// 		}
+	// 		//Handle duplication errors
+	// 		if (err.code == 11000) {
+	// 			req.flash('error', 'THING already exists');
+	// 			return res.redirect('/newgame');
+	// 		}
+	// 		//Other error
+	// 		return next(err);
+	// 	}
+	// 	//If no error, game created. Redirect...
+	// 	res.status(201); //HTTP "Created"
+	// 	return res.redirect('/games');
+	// });
 });
 
 //TODO UI prototype - delete this

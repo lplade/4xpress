@@ -13,31 +13,38 @@ block content
 				form
 					.form-group
 						label Game name
-						input.form-control(type="text" name="gamename" placeholder="Game name")
+						input.form-control(type="text" name="gamename" placeholder="Game name" required)
 						span.help-block Make up a creative title for your game
 					.form-group
 						label Player 1
 						select.form-control.disabled(name="player1")
 							option(value="#{creatingUser._id}" selected) #{creatingUser.local.username}
+					//TODO the rest of these need to filter so you don't end up submitting duplicate players
 					.form-group
 						label Player 2
 						select.form-control(name="player2")
 							option(value="NOPLAYER" selected) --None--
-							for player in players
-								option(value="#{player._id}") #{player.local.username}
+							for user in users
+								option(value="#{user._id}") #{user.local.username}
 					.form-group
 						label Player 3
 						select.form-control(name="player3")
 							option(value="NOPLAYER" selected) --None--
-							for player in players
-								option(value="#{player._id}") #{player.local.username}
+							for user in users
+								option(value="#{user._id}") #{user.local.username}
 					.form-group
 						label Player 4
 						select.form-control(name="player4")
 							option(value="NOPLAYER" selected) --None--
-							for player in players
-								option(value="#{player._id}") #{player.local.username}
+							for user in users
+								option(value="#{user._id}") #{user.local.username}
 					.form-group
-						p Put some more options here
+						label Galaxy size
+						select.form-control.disabled(name="gridSize")
+							option(value="8" selected) 8x8
+					.form-group
+						label Stellar density
+						select.form-control.disabled(name="density")
+							option(value="0.3333333" selected) 33%
 					button.btn.btn-default(type='submit' name='newgame') Create new game
 					//TODO Client-side JS validation to make sure no player is listed not more than once?

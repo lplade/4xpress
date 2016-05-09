@@ -1,5 +1,4 @@
 //app-wide constants
-const APPNAME = require('./config/globals').APPNAME;
 const PORT = require('./config/globals').PORT;
 
 //npm dependencies
