@@ -1,4 +1,5 @@
 var APPNAME = require('./config/globals').APPNAME;
+var TZ = require('./config/globals').TZ;
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
