@@ -4,11 +4,15 @@ block content
 	.container
 		.row
 			.col-md-6
-				h1.page-header.alert.alert-danger
-					span.glyphicon.glyphicon-alert
-					| #{' '}#{message}
 				if error.status
-					h2.text-warning HTTP #{error.status}
+					h1.page-header.alert.alert-danger
+						span.glyphicon.glyphicon-alert
+						| #{' '} HTTP #{error.status}
+				else
+					h1.page-header.alert.alert-danger
+						span.glyphicon.glyphicon-alert
+						| #{' '} ERROR
+				p.text-warning= message
 			.col-md-6
 				.with-caption
 					img.img-responsive(src="/img/32709-wallpaper1.jpg" alt="Cygnus X-1")

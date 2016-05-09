@@ -83,7 +83,6 @@ router.get('/users/:user_id', isLoggedIn, function (req, res, next) {
 		}
 		//TODO only show to matching authenticated user
 		console.log('Returned ' + userDocs);
-		var createdTimeInLocal = moment(userDocs.signUpDate).tz(TZ).format('Y-MMM-DD HH:mm:ss ZZ');
 		return res.render('userX', {
 			userData: userDocs,
 			error: req.flash('error')
