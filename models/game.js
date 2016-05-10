@@ -53,19 +53,19 @@ var GameSchema = Schema({
 // };
 
 // Randomly generate the starmap
-GameSchema.methods.buildMap = function ( gridSize, density, callback) {
-	var gridX = 0;
+GameSchema.methods.buildMap = function (gridSize, density, callback) {
+	var gridY = 0;
 	var galData = [];
-	for (gridX; gridX < gridSize; gridX++) {
-		//console.log('column ' + gridX);
-		var gridY = 0;
-		for (gridY; gridY < gridSize; gridY++) {
-			//console.log('row ' + gridY);
+	for (gridY; gridY < gridSize; gridY++) {
+		//console.log('row ' + gridY);
+		var gridX = 0;
+		for (gridX; gridX < gridSize; gridX++) {
+			//console.log('column ' + gridX);
 			if (chance.bool({likelihood: density})) {
 				// TODO pick name from imported list and test for unique
 				var name = chance.city();
 				var coordinates = [gridX, gridY];
-				var starClass = chance.pickone(['G','K','F','M']);
+				var starClass = chance.pickone(['G', 'K', 'F', 'M', 'M']);
 				//TODO define star stuff externally
 				var biome = chance.d100();
 				var minerals = chance.d100();
