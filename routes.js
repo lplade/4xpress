@@ -104,14 +104,16 @@ router.get('/games', function (req, res, next) {
 		if (err) {
 			return next(err);
 		}
-		//do some math on query to pass to renderer
-		var numPlayers = gameDocs.players.length();
-		var timeRemaining = gameDocs.nextTurnGenTime - Date.now();
-		var timeRemainingStr = moment(currentTime).tz(TZ).format('Y-MMM-DD HH:mm:ss ZZ');
 
+		//TODO calculate how much time until turn - get nextTurnGenTime setter in place
+		//var timeRemaining = gameDocs.nextTurnGenTime - Date.now();
+		//var timeRemainingStr = moment(currentTime).tz(TZ).format('Y-MMM-DD HH:mm:ss ZZ');
+
+		var timeRemainingStr = "YYYY-MM-DD HH:MM:SS CDT";
+		
 		return res.render('games', {
 			games: gameDocs,
-			numPlayers: numPlayers,
+			//numPlayers: numPlayers,
 			timeRemaining: timeRemainingStr,
 			error: req.flash('error')
 		})
@@ -225,8 +227,8 @@ router.post('/newgame', isLoggedIn, function (req, res, next) {
 		}
 		//If no error, game created. Redirect...
 		res.status(201); //HTTP "Created"
-		//return res.redirect('/games');
-		return res.json(newGame);
+		return res.redirect('/games');
+		//return res.json(newGame);
 	});
 });
 

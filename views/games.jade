@@ -1,5 +1,7 @@
 extends layout
 
+
+
 block content
 	.container
 		h1.page-header.text-uppercase= title
@@ -14,6 +16,7 @@ block content
 					td Turn
 					td Time until next turn
 				for game in games
+					- var numPlayers = game.players.length
 					td
 						a(href="/games/#{game._id}") #{game.gameName}
 					td= numPlayers
