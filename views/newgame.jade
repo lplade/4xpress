@@ -10,7 +10,8 @@ block content
 				h1.page-header.text-uppercase= title
 				h2 Create a game
 				//TODO add players via Bootstrap modal?
-				form
+				form(action="/newgame" method="post")
+					input.hidden(name="creatorId" value="#{creatingUser._id}" hidden)
 					.form-group
 						label Game name
 						input.form-control(type="text" name="gamename" placeholder="Game name" required)
@@ -40,11 +41,15 @@ block content
 								option(value="#{user._id}") #{user.local.username}
 					.form-group
 						label Galaxy size
-						select.form-control.disabled(name="gridSize")
+						select.form-control(name="gridSize")
 							option(value="8" selected) 8x8
 					.form-group
 						label Stellar density
-						select.form-control.disabled(name="density")
-							option(value="0.3333333" selected) 33%
-					button.btn.btn-default(type='submit' name='newgame') Create new game
+						select.form-control(name="density")
+							option(value="33.3333333" selected) 33%
+					.form-group
+						label Turn schedule
+						input.form-control(type="text" name="cronStr" value="0 0 0 1/1 * ? *" readonly)
+						//default to once a day at midnight
+					button.btn.btn-default(type='submit') Create new game
 					//TODO Client-side JS validation to make sure no player is listed not more than once?

@@ -11,3 +11,12 @@
     }]
   }
 }
+
+{ gamename: 'test',
+  player1: '572bb7f586f369725e0f751d',
+  player2: '572bb82386f369725e0f751e',
+  player3: 'NOPLAYER',
+  player4: 'NOPLAYER',
+  gridSize: '8',
+  density: '0.3333333',
+  newgame: '' }

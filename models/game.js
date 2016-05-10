@@ -2,9 +2,17 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 var User = require('./user');
 
+var chance = require('chance').Chance();
+
 var GameSchema = Schema({
-	gameName: String,
-	_creator: {
+	gameName: {
+		type: String,
+		unique: true,
+		required: true,
+		lowercase: true,
+		trim: true
+	},
+	creatorId: {
 		type: Schema.Types.ObjectId,
 		ref: 'User'
 	},
@@ -22,29 +30,61 @@ var GameSchema = Schema({
 	dateLastTurnGen: Date,
 	nextTurnGenTime: Date, //update this every turn
 	newTurnsCronStr: String, //when to generate new turn - format as a cron string //TODO validate format
-	galaxyData: {
-		//TODO all the data for the map goes in here - yet another Schema?
-	}
+	galaxyData: [{
+		name: String,
+		coordinates: [Number], // [x, y]
+		starClass: String,
+		mainWorld: {
+			biome: Number,
+			minerals: Number
+		},
+		starBase: String, //starbase type
+		owner: {
+			type: Schema.Types.ObjectId,
+			ref: 'User'
+		}
+	}]
 });
 
-GameSchema.methods.addPlayer = function (userId) {
-	User.findById(userId, function (err, docs) {
-		var newPlayer = new Player;
-	});
-};
+// GameSchema.methods.addPlayer = function (userId) {
+// 	User.findById(userId, function (err, docs) {
+// 		var newPlayer = new Player;
+// 	});
+// };
 
 // Randomly generate the starmap
-GameSchema.methods.buildMap = function (gridSize, density) {
-	var gridX = 0, gridY = 0;
-	for (0; gridX < gridSize; gridX++) {
-		for (0; gridY < gridSize; gridY++) {
-			if (function () {
-					return Math.random()
-				} < density) {
-				//TODO generate a star at this coordinate
+GameSchema.methods.buildMap = function ( gridSize, density, callback) {
+	var gridX = 0;
+	var galData = [];
+	for (gridX; gridX < gridSize; gridX++) {
+		console.log('column ' + gridX);
+		var gridY = 0;
+		for (gridY; gridY < gridSize; gridY++) {
+			console.log('row ' + gridY);
+			if (chance.bool({likelihood: density})) {
+				// TODO pick name from imported list and test for unique
+				var name = chance.city();
+				var coordinates = [gridX, gridY];
+				var starClass = chance.pickone(['G','K','F','M']);
+				//TODO define star stuff externally
+				var biome = chance.d100();
+				var minerals = chance.d100();
+				var mainworld = {"biome": biome, "minerals": minerals};
+				var sector = {
+					"name": name,
+					"coordinates": coordinates,
+					"starClass": starClass,
+					"mainWorld": mainworld
+				};
+				galData.push(sector);
+				console.log('sector');
+			} else {
+				console.log('empty');
 			}
 		}
 	}
+	this.galaxyData = galData;
+	this.save(callback);
 };
 
 module.exports = mongoose.model('Game', GameSchema);

@@ -7,7 +7,8 @@ var UserSchema = new mongoose.Schema({
 			type: String,
 			unique: true,
 			required: true,
-			lowercase: true //store lowercase best option?
+			lowercase: true, //store lowercase best option?
+			trim: true
 		},
 		password: {
 			type: String,

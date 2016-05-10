@@ -9,6 +9,7 @@
     "async": "^2.0.0-rc.4",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.0",
+    "chance": "^1.0.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
@@ -23,6 +24,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "remove-value": "^1.0.0",
     "serve-favicon": "^2.3.0"
   }
 }

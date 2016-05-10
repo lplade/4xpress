@@ -4,6 +4,8 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var moment = require('moment-timezone');
+var removeValue = require('remove-value');
+Array.prototype.remove = removeValue;
 
 var User = require('./models/user');
 var Game = require('./models/game');
@@ -140,43 +142,89 @@ router.get('/newgame', isLoggedIn, function (req, res) {
 	});
 });
 
-router.post('/newgame', isLoggedIn, function (req, res) {
+router.post('/newgame', isLoggedIn, function (req, res, next) {
 	//TODO populate fields in game and player collections
-
 	console.log(req.body);
+//	res.json(req.body);
+// Form returns this sort of data:
+	/*	{ creatorId: '572bb7f586f369725e0f751d',
+	 gamename: 'test',
+	 player1: '572bb7f586f369725e0f751d',
+	 player2: '572bb82386f369725e0f751e',
+	 player3: 'NOPLAYER',
+	 player4: 'NOPLAYER',
+	 gridSize: '8',
+	 density: '0.3333333',
+	 cronStr: '0 0 0 1/1 * ? *' }*/
+
+	//Turn player ids from form data into array
+	//TODO data validation (duplicate players, enough players)
+	var playerIds = [req.body.player1, req.body.player2, req.body.player3, req.body.player4];
+	console.log('playerids:' + playerIds);
+	playerIds.remove('NOPLAYER'); //remove-value library
+	console.log('trimmed playerids:' + playerIds);
+	var players = [];
+	for (var index=0; index<playerIds.length; index++) {
+		console.log('Pl' + index +"=" + playerIds[index]);
+		players.push({
+			user: playerIds[index],
+			newMove: ""
+		});
+	}
+	console.log("PLAYERS:");
+	console.log(players);
+	if (players.length == 0) next(err);
+	//populate() these?
+
+	//turn duration
+	var dateCreated = Date.now();
+	var currentTurnNumber = 1;
+	//leave nextTurnGenTime undefined for now?
+	var newTurnsCronStr = req.body.cronStr;
+
+	//then build the json object and save it to Game
+	var newGame = new Game({
+		gameName: req.body.gameName,
+		creatorId: req.body.creatorId,
+		players: players,
+		dateCreated: dateCreated,
+		currentTurnNumber: currentTurnNumber,
+		newTurnsCronStr: newTurnsCronStr
+	});
+
+	var gridSize = req.body.gridSize;
+	var density = req.body.density; // formatted for chance module
+
+	console.log('NEWGAME before galgen:');
+	console.log(newGame);
+
+	//Generate the starmap
+	newGame.buildMap(gridSize, density, function (err, galaxy) {
+		console.log("GALAXY:");
+		console.log(galaxy);
+	});
 
 
-	//
-	// var newGame = new Game(req.body);
-	//
-	// //create the game
-	// //for each player in the game
-	// //create a Player
-	//
-	// var gridSize = 8; //TODO make this user configurable in form
-	// var density = 1/3; //TODO make this user configurable
-	//
-	// newGame.buildMap(gridSize, density);
-	//
-	// newGame.save(function(err){
-	// 	//Handle validation errors
-	// 	if(err) {
-	// 		if (err.name = "ValidationError") {
-	// 			req.flash('error', 'Invalid data');
-	// 			return res.redirect('/newgame');
-	// 		}
-	// 		//Handle duplication errors
-	// 		if (err.code == 11000) {
-	// 			req.flash('error', 'THING already exists');
-	// 			return res.redirect('/newgame');
-	// 		}
-	// 		//Other error
-	// 		return next(err);
-	// 	}
-	// 	//If no error, game created. Redirect...
-	// 	res.status(201); //HTTP "Created"
-	// 	return res.redirect('/games');
-	// });
+	newGame.save(function (err) {
+		//Handle validation errors
+		if (err) {
+			if (err.name = "ValidationError") {
+				req.flash('error', 'Invalid data');
+				return res.redirect('/newgame');
+			}
+			//Handle duplication errors
+			if (err.code == 11000) {
+				req.flash('error', 'THING already exists');
+				return res.redirect('/newgame');
+			}
+			//Other error
+			return next(err);
+		}
+		//If no error, game created. Redirect...
+		res.status(201); //HTTP "Created"
+		//return res.redirect('/games');
+		return res.json(newGame);
+	});
 });
 
 //TODO UI prototype - delete this
