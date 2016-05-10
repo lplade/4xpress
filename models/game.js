@@ -57,10 +57,10 @@ GameSchema.methods.buildMap = function ( gridSize, density, callback) {
 	var gridX = 0;
 	var galData = [];
 	for (gridX; gridX < gridSize; gridX++) {
-		console.log('column ' + gridX);
+		//console.log('column ' + gridX);
 		var gridY = 0;
 		for (gridY; gridY < gridSize; gridY++) {
-			console.log('row ' + gridY);
+			//console.log('row ' + gridY);
 			if (chance.bool({likelihood: density})) {
 				// TODO pick name from imported list and test for unique
 				var name = chance.city();
@@ -77,11 +77,14 @@ GameSchema.methods.buildMap = function ( gridSize, density, callback) {
 					"mainWorld": mainworld
 				};
 				galData.push(sector);
-				console.log('sector');
+				process.stdout.write('*'); //make a little map on the console
+				//console.log('sector');
 			} else {
-				console.log('empty');
+				//console.log('empty');
+				process.stdout.write('.');
 			}
 		}
+		process.stdout.write('\n');
 	}
 	this.galaxyData = galData;
 	this.save(callback);

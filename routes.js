@@ -144,7 +144,7 @@ router.get('/newgame', isLoggedIn, function (req, res) {
 
 router.post('/newgame', isLoggedIn, function (req, res, next) {
 	//TODO populate fields in game and player collections
-	console.log(req.body);
+	//console.log(req.body);
 //	res.json(req.body);
 // Form returns this sort of data:
 	/*	{ creatorId: '572bb7f586f369725e0f751d',
@@ -160,19 +160,19 @@ router.post('/newgame', isLoggedIn, function (req, res, next) {
 	//Turn player ids from form data into array
 	//TODO data validation (duplicate players, enough players)
 	var playerIds = [req.body.player1, req.body.player2, req.body.player3, req.body.player4];
-	console.log('playerids:' + playerIds);
+	//console.log('playerids:' + playerIds);
 	playerIds.remove('NOPLAYER'); //remove-value library
-	console.log('trimmed playerids:' + playerIds);
+	//console.log('trimmed playerids:' + playerIds);
 	var players = [];
 	for (var index=0; index<playerIds.length; index++) {
-		console.log('Pl' + index +"=" + playerIds[index]);
+		//console.log('Pl' + index +"=" + playerIds[index]);
 		players.push({
 			user: playerIds[index],
 			newMove: ""
 		});
 	}
-	console.log("PLAYERS:");
-	console.log(players);
+	//console.log("PLAYERS:");
+	//console.log(players);
 	if (players.length == 0) next(err);
 	//populate() these?
 
@@ -195,12 +195,15 @@ router.post('/newgame', isLoggedIn, function (req, res, next) {
 	var gridSize = req.body.gridSize;
 	var density = req.body.density; // formatted for chance module
 
-	console.log('NEWGAME before galgen:');
-	console.log(newGame);
+	//console.log('NEWGAME before galgen:');
+	//console.log(newGame);
 
 	//Generate the starmap
 	newGame.buildMap(gridSize, density, function (err, galaxy) {
-		console.log("GALAXY:");
+		// if (err) {
+		// 	console.log('Trouble generating galaxy');
+		// 	return next(err);
+		// }
 		console.log(galaxy);
 	});
 
