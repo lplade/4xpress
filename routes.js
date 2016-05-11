@@ -83,12 +83,38 @@ router.get('/users/:user_id', isLoggedIn, function (req, res, next) {
 			return next(err);
 			//TODO redirect to /users on fail
 		}
-		//TODO only show to matching authenticated user
-		console.log('Returned ' + userDocs);
-		return res.render('userX', {
-			userData: userDocs,
-			error: req.flash('error')
-			//TODO need to pass game info too
+		var gamesImIn = [];
+		Game.find(function (err, gameDocs) {
+			if (err) {
+				return next(err);
+			}
+			console.log('querying games...');
+
+			//TODO write this as a mongoose query
+			for (var gi = 0; gi < gameDocs.length; gi++) {
+				//console.log('gameidx:' + gi);
+				//console.log(gameDocs[gi].players);
+				for (var pi = 0; pi < gameDocs[gi].players.length; pi++) {
+					//console.log('  playeridx:' + pi);
+					if (gameDocs[gi].players[pi].user == req.params.user_id) {
+						gamesImIn.push({
+							gameName: gameDocs[gi].gameName,
+							gameId: gameDocs[gi]._id
+						});
+						//console.log('match ' + gameDocs[gi].gameName);
+					}
+				}
+			}
+			//console.log(gamesImIn);
+
+			//TODO only show to matching authenticated user
+			//console.log('Returned ' + userDocs);
+			return res.render('userX', {
+				userData: userDocs,
+				gamesImIn: gamesImIn,
+				error: req.flash('error')
+				//TODO need to pass game info too
+			});
 		});
 	});
 });
@@ -110,7 +136,7 @@ router.get('/games', function (req, res, next) {
 		//var timeRemainingStr = moment(currentTime).tz(TZ).format('Y-MMM-DD HH:mm:ss ZZ');
 
 		var timeRemainingStr = "YYYY-MM-DD HH:MM:SS CDT";
-		
+
 		return res.render('games', {
 			games: gameDocs,
 			//numPlayers: numPlayers,
@@ -120,28 +146,28 @@ router.get('/games', function (req, res, next) {
 	});
 });
 
-//TODO /game/:game_id - the main game interface - require auth
-router.get('/games/:game_id', function (req, res, next) {
+//the main game interface 
+router.get('/games/:game_id', isLoggedIn, function (req, res, next) {
 	//TODO query all necessary bits of game, pass to renderer
-	
-		Game.findById(req.params.game_id, function (err, gameDocs) {
-			if (err) {
-				//res.send(err);
-				return next(err);
-				//TODO redirect to /games on fail
-			}
-			//TODO only show to matching authenticated user
-			console.log('Returned ' + gameDocs);
-			//instead of passing whole object to (potential cheating) client, pass on info they can see
-			return res.render('gameX', {
-				_gameName: gameDocs.gameName,
-				_currentTurnNumber: gameDocs.currentTurnNumber,
-				_galaxyData: gameDocs.galaxyData,
-				error: req.flash('error')
-				//TODO need to pass game info too
-			});
+
+	Game.findById(req.params.game_id, function (err, gameDocs) {
+		if (err) {
+			//res.send(err);
+			return next(err);
+			//TODO redirect to /games on fail
+		}
+		//TODO only show to matching authenticated user
+		console.log('Returned ' + gameDocs);
+		//instead of passing whole object to (potential cheating) client, pass on info they can see
+		return res.render('gameX', {
+			_gameName: gameDocs.gameName,
+			_currentTurnNumber: gameDocs.currentTurnNumber,
+			_galaxyData: gameDocs.galaxyData,
+			error: req.flash('error')
+			//TODO need to pass game info too
 		});
-	
+	});
+
 });
 
 router.get('/newgame', isLoggedIn, function (req, res) {
@@ -181,7 +207,7 @@ router.post('/newgame', isLoggedIn, function (req, res, next) {
 	playerIds.remove('NOPLAYER'); //remove-value library
 	//console.log('trimmed playerids:' + playerIds);
 	var players = [];
-	for (var index=0; index<playerIds.length; index++) {
+	for (var index = 0; index < playerIds.length; index++) {
 		//console.log('Pl' + index +"=" + playerIds[index]);
 		players.push({
 			user: playerIds[index],
@@ -244,6 +270,9 @@ router.post('/newgame', isLoggedIn, function (req, res, next) {
 		res.status(201); //HTTP "Created"
 		return res.redirect('/games');
 		//return res.json(newGame);
+
+		//TODO for some reason, sometimes you have to manually refresh to see new game
+
 	});
 });
 

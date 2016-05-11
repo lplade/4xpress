@@ -7,6 +7,8 @@ Requires npm and mongodb
 
 If env variable 'development' is set you get more debug information
 
+Test workflow: Create a new user. View user profile page. Create new game from user profile page.
+
 Inspirations:
 - [Master of Orion](http://www.mobygames.com/game/master-of-orion)
 - [Stars!](https://en.wikipedia.org/wiki/Stars!)

@@ -17,8 +17,9 @@ block content
 				.currgames
 					h2 Current games
 					ul.list-group
-						//for game in games
-						li.list-group-item Game1
+						for game in gamesImIn
+							li.list-group-item
+								a(href="/games/#{game.gameId}")= game.gameName
 				.newgame
 					a.btn.btn-default.btn-block(href="/newgame")
 						span.glyphicon.glyphicon-plus
