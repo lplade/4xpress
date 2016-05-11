@@ -16,10 +16,11 @@ block content
 					td Turn
 					td Time until next turn
 				for game in games
-					- var numPlayers = game.players.length
-					td
-						a(href="/games/#{game._id}") #{game.gameName}
-					td= numPlayers
-					td= game.currentTurnNumber
-					td= timeRemaining
+					tr
+						- var numPlayers = game.players.length
+						td
+							a(href="/games/#{game._id}") #{game.gameName}
+						td= numPlayers
+						td= game.currentTurnNumber
+						td= timeRemaining
 

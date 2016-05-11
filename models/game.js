@@ -60,7 +60,11 @@ GameSchema.methods.buildMap = function (gridSize, density, callback) {
 				// TODO pick name from imported list and test for unique
 				var name = chance.city();
 				var coordinates = [gridX, gridY];
-				var starClass = chance.pickone(['G', 'K', 'F', 'M', 'M']);
+				//var starClass = chance.pickone(['G', 'K', 'F', 'M', 'M']);
+				var starClass = chance.weighted(
+					['O', 'B', 'A', 'F', 'G', 'K', 'M'],
+					[0.00003, 0.125, 0.625, 3, 7.5, 12, 76]
+				);
 				//TODO define star stuff externally
 				var biome = chance.d100();
 				var minerals = chance.d100();

@@ -1,6 +1,6 @@
 $(document).ready(function () {
 	const GRIDSIZE = 8;
-	const MAPSIZE = 320; //use c.getAttribute() instead?
+	const MAPSIZE = 1600; //use c.getAttribute() instead?
 	const SQUARESIZE = MAPSIZE / GRIDSIZE;
 
 	//for now, assume canvas of 320x320
@@ -109,11 +109,11 @@ $(document).ready(function () {
 
 	//draw the grid
 	function drawGrid() {
-		ctx.strokeStyle = "#008800";
+		ctx.strokeStyle = "#004400";
 		ctx.lineWidth = 1;
-		ctx.globalAlpha = 0.3;
-		ctx.shadowBlur = 5;
-		ctx.shadowColor = '#004400';
+		ctx.globalAlpha = 0.8;
+		ctx.shadowBlur = 40;
+		ctx.shadowColor = '#008800';
 		for (var y = 0; y <= GRIDSIZE; y++) {
 			hLine((y * SQUARESIZE));
 		}
@@ -145,6 +145,14 @@ $(document).ready(function () {
 				starSource[i].xCoord * SQUARESIZE,
 				starSource[i].yCoord * SQUARESIZE,
 				SQUARESIZE, SQUARESIZE
+			);
+			ctx.font = '20pt Arial';
+			ctx.fillStyle = 'white';
+			ctx.textAlign = 'center';
+			ctx.fillText(
+				(starSource[i].name).toUpperCase(),
+				(starSource[i].xCoord * SQUARESIZE) + (0.5 * SQUARESIZE),
+				(starSource[i].yCoord * SQUARESIZE) + (0.9 * SQUARESIZE)
 			)
 		}
 	});

@@ -247,11 +247,6 @@ router.post('/newgame', isLoggedIn, function (req, res, next) {
 	});
 });
 
-//TODO UI prototype - delete this
-router.get('/galtest', function (req, res) {
-	res.render('galaxy');
-});
-
 // HELPER FUNCTIONS
 function isLoggedIn(req, res, next) {
 	//if user is authenticated in the session, carry on
