@@ -100,7 +100,7 @@ $(document).ready(function () {
 
 	// Draw a horizontal line
 	function hLine(yPos) {
-		wide = c.getAttribute("width");
+		var wide = c.getAttribute("width");
 		ctx.beginPath();
 		ctx.moveTo(0, yPos);
 		ctx.lineTo(wide, yPos);
@@ -109,7 +109,7 @@ $(document).ready(function () {
 
 	// Draw a vertical line
 	function vLine(xPos) {
-		high = c.getAttribute("height");
+		var high = c.getAttribute("height");
 		ctx.moveTo(xPos, 0);
 		ctx.lineTo(xPos, high);
 		ctx.stroke();
@@ -174,26 +174,37 @@ $(document).ready(function () {
 	function getMousePos(canvas, evt) {
 		var rect = c.getBoundingClientRect();
 		return {
-			x: evt.clientX - rect.left,
-			y: evt.clientY - rect.top
+			x: (evt.clientX - rect.left) / (rect.right - rect.left) * c.width,
+			y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * c.height
 		};
 	}
 
-	c.addEventListener('click', function(evt){
+	c.addEventListener('click', function (evt) {
 		var mousePos = getMousePos(canvas, evt);
-		//returns in absolute X,Y -- we need relative to canvas
-		//TODO argh
 
 		//var cFactor= MAPSIZE / cWidth;
-		var squareX = mousePos.x /  SQUARESIZE;
-		var squareY = mousePos.y /  SQUARESIZE;
-
+		var squareX = Math.floor(mousePos.x / SQUARESIZE);
+		var squareY = Math.floor(mousePos.y / SQUARESIZE);
 
 		console.log("Clicked at " + squareX + ", " + squareY); //still nope
 
-
 		//$('#starNameDiv').text("Star: " + name);
-		//$('#coordDiv').text('(' + )
+		//argh please update
 
+
+
+		for (var i in mapData) {
+			if ((mapData[i].coordinates[0] == squareX ) && (mapData[i].coordinates[1] == squareY)) {
+				$('#starNameDiv').text("Star: " + mapData[i].name);
+
+				$('#coordDiv').text("(" + squareX + ", " + squareY + ")");
+				$('#starClassDiv').text("Spectral class " + mapData[i].starClass);
+				//#mainWorldBiomeDiv 53% habitability
+				//#mainWorldMinDiv 43% minerals
+				$('#mainWorldBiomeDiv').text(mapData[i].mainWorld.biome +" % habitability");
+				$('#mainWorldMinDiv').text(mapData[i].mainWorld.minerals + " % minerals");
+			}
+		}
+		
 	}, false);
 });
