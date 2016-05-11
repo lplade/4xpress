@@ -157,7 +157,7 @@ router.get('/games/:game_id', isLoggedIn, function (req, res, next) {
 			//TODO redirect to /games on fail
 		}
 		//TODO only show to matching authenticated user
-		console.log('Returned ' + gameDocs);
+		//console.log('Returned ' + gameDocs);
 		//instead of passing whole object to (potential cheating) client, pass on info they can see
 		return res.render('gameX', {
 			_gameName: gameDocs.gameName,
@@ -247,10 +247,10 @@ router.post('/newgame', isLoggedIn, function (req, res, next) {
 		// 	console.log('Trouble generating galaxy');
 		// 	return next(err);
 		// }
-		console.log(galaxy);
+		console.log(galaxy); //uh, can I remove this without breaking callback?
 	});
 
-
+	//and save it out
 	newGame.save(function (err) {
 		//Handle validation errors
 		if (err) {

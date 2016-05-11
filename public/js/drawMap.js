@@ -17,36 +17,44 @@ $(document).ready(function () {
 		var stArray = [];
 		//console.log(_mapData);
 		for (var i = 0; i < _mapData.length; i++) {
-			var _starType;
+			var _starType, formattedName;
 			switch (_mapData[i].starClass) {
 				case "O":
 					_starType = "starO";
+					formattedName = _mapData[i].name.toUpperCase();
 					break;
 				case "B":
 					_starType = "starB";
+					formattedName = _mapData[i].name.toUpperCase();
 					break;
 				case "A":
 					_starType = "starA";
+					formattedName = _mapData[i].name.toUpperCase();
 					break;
 				case "F":
 					_starType = "starF";
+					formattedName = _mapData[i].name.toUpperCase();
 					break;
 				case "G":
 					_starType = "starG";
+					formattedName = _mapData[i].name.toUpperCase();
 					break;
 				case "K":
 					_starType = "starK";
+					formattedName = _mapData[i].name.toUpperCase();
 					break;
 				case "M":
 					_starType = "starM";
+					formattedName = _mapData[i].name;
 					break;
 				default:
 					_starType = "starM";
+					formattedName = _mapData[i].name;
 			}
 
 
 			stArray.push({
-				name: _mapData[i].name,
+				name: formattedName,
 				starType: _starType,
 				xCoord: _mapData[i].coordinates[0],
 				yCoord: _mapData[i].coordinates[1]
@@ -150,10 +158,10 @@ $(document).ready(function () {
 			ctx.fillStyle = 'white';
 			ctx.textAlign = 'center';
 			ctx.fillText(
-				(starSource[i].name).toUpperCase(),
+				(starSource[i].name),
 				(starSource[i].xCoord * SQUARESIZE) + (0.5 * SQUARESIZE),
 				(starSource[i].yCoord * SQUARESIZE) + (0.9 * SQUARESIZE)
-			)
+			);
 		}
 	});
 });
