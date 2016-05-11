@@ -164,4 +164,36 @@ $(document).ready(function () {
 			);
 		}
 	});
+
+
+	//TODO listen for click. Figure out position on x,y grid.
+	// Search for matching X,Y in galaxy array and updated divs on page
+	// with data
+
+	//html5canvastutorials.com/advanced/htm5-canvas-mouse-coordinates
+	function getMousePos(canvas, evt) {
+		var rect = c.getBoundingClientRect();
+		return {
+			x: evt.clientX - rect.left,
+			y: evt.clientY - rect.top
+		};
+	}
+
+	c.addEventListener('click', function(evt){
+		var mousePos = getMousePos(canvas, evt);
+		//returns in absolute X,Y -- we need relative to canvas
+		//TODO argh
+
+		//var cFactor= MAPSIZE / cWidth;
+		var squareX = mousePos.x /  SQUARESIZE;
+		var squareY = mousePos.y /  SQUARESIZE;
+
+
+		console.log("Clicked at " + squareX + ", " + squareY); //still nope
+
+
+		//$('#starNameDiv').text("Star: " + name);
+		//$('#coordDiv').text('(' + )
+
+	}, false);
 });
