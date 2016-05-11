@@ -121,10 +121,10 @@ router.get('/games', function (req, res, next) {
 });
 
 //TODO /game/:game_id - the main game interface - require auth
-router.get('/games/:game_id', isLoggedIn, function (req, res) {
+router.get('/games/:game_id', function (req, res) {
 	//TODO query all necessary bits of game, pass to renderer
-	res.render('galaxy', {
-		game_id: game_id
+	res.render('gameX', {
+		//game_id: game_id
 	});
 	//TODO redirect to /game on fail - see GET /user/:user_id
 });
