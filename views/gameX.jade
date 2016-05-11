@@ -3,12 +3,12 @@ extends layout
 //The main game interface (mockup)
 block content
 	.container
-		h3= game_id
+		h3= _gameName
 		.row
 			.col-lg-8
 				//This is a placeholder for the game map
 				//TODO render map in canvas
-				canvas#canvas(width="300" height="300") Sorry your browser doesn't support the CANVAS element
+				canvas#canvas(width="320" height="320") Sorry, your browser doesn't support the CANVAS element
 				//img.img-responsive(src="/img/starfield.jpeg" alt="game map placeholder")
 				p#statusText Some status text
 			.col-lg-4
@@ -18,4 +18,6 @@ block content
 				button.btn.btn-default Command 4
 
 block otherScripts
+	script(type="text/javascript").
+		var mapData = !{JSON.stringify(_galaxyData)};
 	script(src="/js/drawMap.js")

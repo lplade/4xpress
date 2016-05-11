@@ -121,12 +121,27 @@ router.get('/games', function (req, res, next) {
 });
 
 //TODO /game/:game_id - the main game interface - require auth
-router.get('/games/:game_id', function (req, res) {
+router.get('/games/:game_id', function (req, res, next) {
 	//TODO query all necessary bits of game, pass to renderer
-	res.render('gameX', {
-		//game_id: game_id
-	});
-	//TODO redirect to /game on fail - see GET /user/:user_id
+	
+		Game.findById(req.params.game_id, function (err, gameDocs) {
+			if (err) {
+				//res.send(err);
+				return next(err);
+				//TODO redirect to /games on fail
+			}
+			//TODO only show to matching authenticated user
+			console.log('Returned ' + gameDocs);
+			//instead of passing whole object to (potential cheating) client, pass on info they can see
+			return res.render('gameX', {
+				_gameName: gameDocs.gameName,
+				_currentTurnNumber: gameDocs.currentTurnNumber,
+				_galaxyData: gameDocs.galaxyData,
+				error: req.flash('error')
+				//TODO need to pass game info too
+			});
+		});
+	
 });
 
 router.get('/newgame', isLoggedIn, function (req, res) {

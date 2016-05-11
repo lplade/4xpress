@@ -46,11 +46,6 @@ var GameSchema = Schema({
 	}]
 });
 
-// GameSchema.methods.addPlayer = function (userId) {
-// 	User.findById(userId, function (err, docs) {
-// 		var newPlayer = new Player;
-// 	});
-// };
 
 // Randomly generate the starmap
 GameSchema.methods.buildMap = function (gridSize, density, callback) {
